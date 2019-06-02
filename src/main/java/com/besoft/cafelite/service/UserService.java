@@ -19,7 +19,7 @@ public class UserService {
 	}
 	
 	public User getUser(Long id) {
-		return repo.getOne(id);
+		return repo.findById(id).get();
 	}
 	
 	public Page<User> selectUser(String search, int pageNumber, int pageSize){

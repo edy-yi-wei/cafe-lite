@@ -19,7 +19,7 @@ public class ModuleService {
 	}
 	
 	public Module getModule(Long id) {
-		return repo.getOne(id);
+		return repo.findById(id).get();
 	}
 	
 	public Page<Module> selectModule(String search, int pageNumber, int pageSize){

@@ -33,6 +33,9 @@ public class Menu implements Serializable{
 	@NotBlank(message = "{menu.menuName.notBlank}")
 	private String menuName;
 	
+	@Column(name = "printout_name")
+	private String printoutName;
+	
 	@Column(name = "menu_price")
 	private Double menuPrice;
 	

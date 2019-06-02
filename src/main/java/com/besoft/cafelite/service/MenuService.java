@@ -19,7 +19,7 @@ public class MenuService {
 	}
 	
 	public Menu getMenu(Long id) {
-		return repo.getOne(id);
+		return repo.findById(id).get();
 	}
 	
 	public Page<Menu> selectMenu(String search, int pageNumber, int pageSize){

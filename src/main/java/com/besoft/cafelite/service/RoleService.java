@@ -19,7 +19,7 @@ public class RoleService {
 	}
 	
 	public Role getRole(Long id) {
-		return repo.getOne(id);
+		return repo.findById(id).get();
 	}
 	
 	public Page<Role> selectRole(String search, int pageNumber, int pageSize){
