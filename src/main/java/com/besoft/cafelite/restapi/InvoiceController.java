@@ -20,6 +20,7 @@ public class InvoiceController {
 	@Autowired
 	private InvoiceService service;
 	
+	
 	@RequestMapping(value = "/invoices", method = RequestMethod.POST)
 	public ResponseEntity<String> saveInvoice(@Valid @RequestBody Invoice invoice) {
 		if(service.save(invoice)) {
