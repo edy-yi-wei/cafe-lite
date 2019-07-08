@@ -6,6 +6,7 @@ import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.geom.Line2D;
 import java.awt.print.PageFormat;
+import java.awt.print.Paper;
 import java.awt.print.Printable;
 import java.awt.print.PrinterJob;
 import java.util.List;
@@ -19,7 +20,13 @@ public class Printer implements Printable{
 	private List<PrintElement> contents;
 	
 	public Printer() {
-	    printJob.setPrintable(this);
+//	    printJob.setPrintable(this);
+	    PageFormat pf = printJob.defaultPage();
+		Paper paper = new Paper();
+		
+		paper.setImageableArea(10, 10, paper.getWidth()-10, paper.getHeight()-10);
+		pf.setPaper(paper);
+		printJob.setPrintable(this, pf);
 	}
  
 	public void print(List<PrintElement> contents) {
@@ -52,7 +59,7 @@ public class Printer implements Printable{
 		int i;
 		Graphics2D g2d;
 		Line2D.Double line = new Line2D.Double();
- 
+		
 		//--- Validate the page number, we only print the first page
 		if (page == 0) {  //--- Create a graphic2D object a set the default parameters
 			g2d = (Graphics2D) g;
@@ -68,6 +75,7 @@ public class Printer implements Printable{
 			
 			if(contents!=null) {
 				for(PrintElement element: contents) {
+//					System.out.println(element.getContent());
 					switch(element.getContent()) {
 					case "-":
 						line.setLine(element.getX(), element.getY(), pageFormat.getWidth(), element.getY());

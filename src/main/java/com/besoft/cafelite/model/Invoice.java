@@ -16,6 +16,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import javax.validation.constraints.NotBlank;
 
 import lombok.Data;
 
@@ -39,6 +40,16 @@ public class Invoice implements Serializable{
 	
 	@Column(name = "invoice_date")
 	private Date invoiceDate;
+	
+	@Column(name = "invoice_type")
+	@NotBlank(message = "Anda belum memilih jenis pesanan")
+	private String invoiceType;
+	
+	@Column(name = "customer_name")
+	private String customerName;
+	
+	@Column(name = "total")
+	private Double total;
 	
 	@Column(name = "payment")
 	private Double payment;

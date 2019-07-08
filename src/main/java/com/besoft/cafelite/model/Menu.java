@@ -13,6 +13,8 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.validation.constraints.NotBlank;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import lombok.Data;
 
 @Data
@@ -29,6 +31,9 @@ public class Menu implements Serializable{
 	@Column(name = "menu_id")
 	private Long menuId;
 	
+	@Column(name = "menu_code")
+	private String menuCode;
+	
 	@Column(name = "menu_name")
 	@NotBlank(message = "{menu.menuName.notBlank}")
 	private String menuName;
@@ -44,5 +49,6 @@ public class Menu implements Serializable{
 	
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "login_id")
+	@JsonIgnore
 	private LoginHistory loginHistory;
 }

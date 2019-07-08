@@ -38,11 +38,14 @@ public class User implements Serializable{
 	@Column(name = "user_password")
 	private String userPassword;
 	
-	@ManyToOne(fetch = FetchType.LAZY)
+	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "role_id")
 	private Role role;
 	
-	@ManyToOne(fetch = FetchType.LAZY)
+	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "login_id")
 	private LoginHistory loginHistory;
+	
+	@Column(name = "deleted")
+	private boolean deleted;
 }

@@ -1,5 +1,8 @@
 package com.besoft.cafelite.restapi;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,23 +27,49 @@ public class RoleController {
 	private RoleService service;
 	
 	@RequestMapping(value = "/roles", method = RequestMethod.POST)
-	public ResponseEntity<String> saveRole(@Valid @RequestBody Role role) {
-		if(service.save(role)) {
-			return new ResponseEntity<String>("Role is saved successfully!", HttpStatus.OK);
-		} else {
-			return new ResponseEntity<String>("Fail to save Role", HttpStatus.BAD_REQUEST);
-		}		
+	public ResponseEntity<List<String>> saveRole(@Valid @RequestBody Role role) {
+		List<String> result = new ArrayList<>();
+		try {
+			service.save(role);
+			result.add("Role is saved successfully!");
+			return new ResponseEntity<List<String>>(result, HttpStatus.OK);
+		} catch(Exception ex) {
+			result.add("Fail to save Role");
+			return new ResponseEntity<List<String>>(result, HttpStatus.BAD_REQUEST);
+		}	
 	}
 	
 	@RequestMapping(value = "/roles", method = RequestMethod.GET)
-	public Page<Role> selectRole(@RequestParam(name = "search", required = false) String search, @RequestParam(name = "pageNumber", required = true) int pageNumber){
-		Page<Role> list = service.selectRole(search, pageNumber, Constant.ROW_PER_PAGE);
+	public Page<Role> selectRole(@RequestParam(name = "search", required = false) String search, @RequestParam(name = "page", required = true) int pageNumber){
+		Page<Role> list = null;
+		try {
+			list = service.selectRole(search, pageNumber, Constant.ROW_PER_PAGE);
+		} catch (Exception ex) {
+			ex.printStackTrace();
+		}
 		return list;
 	}
 	
 	@RequestMapping(value = "/roles/{id}", method = RequestMethod.GET)
 	public Role getRole(@PathVariable("id") Long id) {
-		return service.getRole(id);
+		try {
+			return service.getRole(id);
+		} catch (Exception ex) {
+			ex.printStackTrace();
+			return null;
+		}
 	}
-	
+
+	@RequestMapping(value = "/roles/{id}", method = RequestMethod.PUT)
+	public ResponseEntity<List<String>> deleteRole(@PathVariable("id") Long id) {
+		List<String> result = new ArrayList<>();
+		try {
+			Role role = service.delete(id);
+			result.add("Role " +role.getRoleName()+ " is deleted!");
+			return new ResponseEntity<List<String>>(result, HttpStatus.OK);
+		} catch(Exception ex) {
+			result.add("Fail to delete role");
+			return new ResponseEntity<List<String>>(result, HttpStatus.BAD_REQUEST);
+		}
+	}
 }

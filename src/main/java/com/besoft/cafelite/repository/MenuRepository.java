@@ -10,6 +10,6 @@ import com.besoft.cafelite.model.Menu;
 @Repository
 public interface MenuRepository extends JpaRepository<Menu, Long>{
 	
-	Page<Menu> findByMenuNameContainingAllIgnoreCase(String menuName, Pageable page);
+	Page<Menu> findByMenuNameContainingAllIgnoreCaseAndDeleted(String menuName, boolean deleted, Pageable page);
 	
 }

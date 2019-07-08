@@ -19,8 +19,8 @@ public class Module {
 	@Column(name = "module_id")
 	private Long moduleId;
 	
-	@Column(name = "order_number")
-	private Integer orderNumber;
+//	@Column(name = "order_number")
+//	private Integer orderNumber;
 	
 	@Column(name = "module_code")
 	private String moduleCode;
@@ -28,6 +28,12 @@ public class Module {
 	@Column(name = "module_name")
 	@NotBlank(message = "{module.moduleName.notBlank}")
 	private String moduleName;
+	
+	@Column(name = "parent_name")
+	private String parentName;
+	
+	@Column(name = "moduleUrl")
+	private String moduleUrl;
 	
 	@Column(name = "deleted")
 	private boolean deleted;
