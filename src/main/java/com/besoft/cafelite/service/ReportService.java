@@ -58,7 +58,7 @@ public class ReportService {
 	private ReportRepository repo;
 	
 	private final Logger logger = LoggerFactory.getLogger(this.getClass());
-	private String destinationEmail = "cindysfriedchicken@gmail.com";
+	private String destinationEmail = "";
 	
 	public void downloadReports(Date startDate, Date endDate) throws Exception {
 		logger.info("ReportService - downloadReports [start date: "+startDate+", end date: "+endDate+"]");
@@ -147,8 +147,8 @@ public class ReportService {
             
             /* --SEND REPORT VIA EMAIL-- */
             String to = destinationEmail; 
-            final String username = "cfcayamgoreng@gmail.com";
-            final String password = "fr13dchk";
+            final String username = "";
+            final String password = "";
             String host="smtp.gmail.com";
             String port = "465";
             java.util.Properties props = null;

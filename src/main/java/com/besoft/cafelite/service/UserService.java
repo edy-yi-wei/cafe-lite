@@ -24,6 +24,7 @@ public class UserService {
 	public User save(User user) {
 		logger.info("UserService - save");
 		try {
+			System.out.println("id: "+user.getUserId());
 			String pass = passwordEncoder.encode(user.getUserPassword());
 			user.setUserPassword(pass);
 			return repo.save(user);
