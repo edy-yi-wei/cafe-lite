@@ -35,6 +35,6 @@ public class Module {
 	@Column(name = "moduleUrl")
 	private String moduleUrl;
 	
-	@Column(name = "deleted")
+	@Column(name = "deleted", nullable = false)
 	private boolean deleted;
 }

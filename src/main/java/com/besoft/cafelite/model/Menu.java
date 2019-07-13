@@ -44,7 +44,7 @@ public class Menu implements Serializable{
 	@Column(name = "menu_price")
 	private Double menuPrice;
 	
-	@Column(name = "deleted")
+	@Column(name = "deleted", nullable = false)
 	private boolean deleted;
 	
 	@ManyToOne(fetch = FetchType.LAZY)

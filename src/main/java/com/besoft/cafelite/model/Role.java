@@ -48,6 +48,6 @@ public class Role implements Serializable {
 	@JoinColumn(name = "role_id")
 	private List<RoleModule> moduleList = new ArrayList<>();
 	
-	@Column(name = "deleted")
+	@Column(name = "deleted", nullable = false)
 	private boolean deleted;
 }

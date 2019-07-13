@@ -46,6 +46,6 @@ public class User implements Serializable{
 	@JoinColumn(name = "login_id")
 	private LoginHistory loginHistory;
 	
-	@Column(name = "deleted")
+	@Column(name = "deleted", nullable = false)
 	private boolean deleted;
 }
