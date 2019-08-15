@@ -32,7 +32,7 @@ public class RawMaterialService {
 		try {
 			System.out.println("id: "+ rawMaterial.getMaterialId());
 			rawMaterial.setQuantity((double) 0);
-			if(rawMaterial.getMaterialId() != null) {
+			if(rawMaterial.getMaterialId() != null && rawMaterial.getMaterialId() > 0) {
 				RawMaterial material = getMaterial(rawMaterial.getMaterialId());
 				if(material != null) {
 					rawMaterial.setQuantity(material.getQuantity());
