@@ -2,6 +2,8 @@ package com.besoft.cafelite.service;
 
 import java.util.List;
 
+import javax.transaction.Transactional;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,6 +25,7 @@ public class SupplierService {
 	
 	private String className = getClass().getName();
 	
+	@Transactional(rollbackOn = Exception.class)
 	public Supplier save(Supplier supplier) {
 		logger.info(String.format("%s - save", className));
 		try {
@@ -35,6 +38,7 @@ public class SupplierService {
 		
 	}
 
+	@Transactional(rollbackOn = Exception.class)
 	public Supplier delete(Long id) throws Exception {
 		logger.info(String.format("%s - delete [id: %s]", new Object[] {className, id}));
 		try {

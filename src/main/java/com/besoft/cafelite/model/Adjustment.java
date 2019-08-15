@@ -2,6 +2,7 @@ package com.besoft.cafelite.model;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import javax.persistence.CascadeType;
@@ -16,15 +17,14 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.validation.constraints.NotBlank;
-
-import com.fasterxml.jackson.annotation.JsonIgnore;
+import javax.validation.constraints.NotNull;
 
 import lombok.Data;
 
 @Data
 @Entity
-@Table(name = "tbl_menu")
-public class Menu implements Serializable{
+@Table(name = "tbl_adjustment")
+public class Adjustment implements Serializable{
 	/**
 	 * 
 	 */
@@ -32,32 +32,21 @@ public class Menu implements Serializable{
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@Column(name = "menu_id")
-	private Long menuId;
+	@Column(name = "adjustment_id")
+	private Long adjustmentId;
 	
-	@Column(name = "menu_code")
-	private String menuCode;
+	@Column(name = "adjustment_number")
+	private String adjustmentNumber;
 	
-	@Column(name = "menu_name")
-	@NotBlank(message = "{menu.menuName.notBlank}")
-	private String menuName;
+	@Column(name = "adjustmentDate")
+	private Date adjustmentDate;
 	
-	@Column(name = "printout_name")
-	private String printoutName;
-	
-	@Column(name = "menu_price")
-	private Double menuPrice;
-	
-	@Column(name = "deleted", nullable = false)
-	private boolean deleted;
-	
-	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "login_id")
-	@JsonIgnore
-	private LoginHistory loginHistory;
-	
+	@ManyToOne(fetch = FetchType.EAGER)
+	@JoinColumn(name = "user_id")
+	private User user;
 	
 	@OneToMany(cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
-	@JoinColumn(name = "menu_id")
-	private List<MenuMaterial> materials = new ArrayList<>();
+	@JoinColumn(name = "adjustment_id")
+	private List<AdjustmentDetail> details = new ArrayList<>();
+	
 }

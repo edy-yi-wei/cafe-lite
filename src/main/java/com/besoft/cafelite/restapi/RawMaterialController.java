@@ -16,59 +16,59 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.besoft.cafelite.model.Supplier;
-import com.besoft.cafelite.service.SupplierService;
+import com.besoft.cafelite.model.RawMaterial;
+import com.besoft.cafelite.service.RawMaterialService;
 import com.besoft.cafelite.utilities.Constant;
 
 @RestController
 @RequestMapping("/cafelite")
-public class SupplierController {
+public class RawMaterialController {
 	@Autowired
-	private SupplierService service;
+	private RawMaterialService service;
 	
-	@RequestMapping(value = "/suppliers", method = RequestMethod.POST)
-	public ResponseEntity<List<String>> saveSupplier(@Valid @RequestBody Supplier supplier) {
+	@RequestMapping(value = "/materials", method = RequestMethod.POST)
+	public ResponseEntity<List<String>> saveMaterial(@Valid @RequestBody RawMaterial rawMaterial) {
 		List<String> result = new ArrayList<>();
 		try {
-			service.save(supplier);
-			result.add("Supplier is saved successfully!");
+			service.save(rawMaterial);
+			result.add("Material is saved successfully!");
 			return new ResponseEntity<List<String>>(result, HttpStatus.OK);
 		} catch(Exception ex) {
-			result.add("Fail to save supplier");
+			result.add("Fail to save material");
 			return new ResponseEntity<List<String>>(result, HttpStatus.BAD_REQUEST);
 		}	
 	}
 	
-	@RequestMapping(value = "/suppliers", method = RequestMethod.GET)
-	public Page<Supplier> selectSupplier(@RequestParam(name = "search", required = false) String search, @RequestParam(name = "page", required = true) int pageNumber){
-		Page<Supplier> list = null;
+	@RequestMapping(value = "/materials", method = RequestMethod.GET)
+	public Page<RawMaterial> selectSupplier(@RequestParam(name = "search", required = false) String search, @RequestParam(name = "page", required = true) int pageNumber){
+		Page<RawMaterial> list = null;
 		try {
-			list = service.selectSupplier(search, pageNumber, Constant.ROW_PER_PAGE);
+			list = service.selectMaterial(search, pageNumber, Constant.ROW_PER_PAGE);
 		} catch (Exception ex) {
 			ex.printStackTrace();
 		}
 		return list;
 	}
 	
-	@RequestMapping(value = "/suppliers/{id}", method = RequestMethod.GET)
-	public Supplier getSupplier(@PathVariable("id") Long id) {
+	@RequestMapping(value = "/materials/{id}", method = RequestMethod.GET)
+	public RawMaterial getMaterial(@PathVariable("id") Long id) {
 		try {
-			return service.getSupplier(id);
+			return service.getMaterial(id);
 		} catch (Exception ex) {
 			ex.printStackTrace();
 			return null;
 		}
 	}
 
-	@RequestMapping(value = "/suppliers/{id}", method = RequestMethod.PUT)
+	@RequestMapping(value = "/materials/{id}", method = RequestMethod.PUT)
 	public ResponseEntity<List<String>> deleteSupplier(@PathVariable("id") Long id) {
 		List<String> result = new ArrayList<>();
 		try {
-			Supplier supplier = service.delete(id);
-			result.add("Supplier " +supplier.getSupplierName()+ " is deleted!");
+			RawMaterial rawMaterial = service.delete(id);
+			result.add("Material " +rawMaterial.getMaterialName()+ " is deleted!");
 			return new ResponseEntity<List<String>>(result, HttpStatus.OK);
 		} catch(Exception ex) {
-			result.add("Fail to delete supplier");
+			result.add("Fail to delete material");
 			return new ResponseEntity<List<String>>(result, HttpStatus.BAD_REQUEST);
 		}
 	}
