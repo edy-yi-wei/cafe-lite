@@ -40,10 +40,21 @@ public class RawMaterialController {
 	}
 	
 	@RequestMapping(value = "/materials", method = RequestMethod.GET)
-	public Page<RawMaterial> selectSupplier(@RequestParam(name = "search", required = false) String search, @RequestParam(name = "page", required = true) int pageNumber){
+	public Page<RawMaterial> selectMaterial(@RequestParam(name = "search", required = false) String search, @RequestParam(name = "page", required = true) int pageNumber){
 		Page<RawMaterial> list = null;
 		try {
 			list = service.selectMaterial(search, pageNumber, Constant.ROW_PER_PAGE);
+		} catch (Exception ex) {
+			ex.printStackTrace();
+		}
+		return list;
+	}
+	
+	@RequestMapping(value = "/materials/parent", method = RequestMethod.GET)
+	public List<RawMaterial> selectMaterialParent(){
+		List<RawMaterial> list = null;
+		try {
+			list = service.getMaterialParentOnly();
 		} catch (Exception ex) {
 			ex.printStackTrace();
 		}

@@ -22,4 +22,7 @@ public interface RawMaterialRepository extends JpaRepository<RawMaterial, Long>{
 	@Query("SELECT s FROM RawMaterial s JOIN s.details d WHERE s.materialId = :material_id AND d.deleted = false")
 	List<RawMaterial> findAllChildByParentId(@Param("material_id") Long id);
 	
+	@Query(value = "SELECT * FROM tbl_material a LEFT JOIN tbl_material_detail b ON a.material_id = b.mat_id WHERE a.deleted = false AND b.mat_id IS NULL", nativeQuery = true)
+	List<RawMaterial> findAllParent();
+	
 }

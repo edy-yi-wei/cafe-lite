@@ -14,6 +14,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import com.besoft.cafelite.model.Purchasing;
+import com.besoft.cafelite.model.PurchasingDetail;
+import com.besoft.cafelite.model.RawMaterial;
 import com.besoft.cafelite.repository.PurchasingRepository;
 
 
@@ -21,6 +23,9 @@ import com.besoft.cafelite.repository.PurchasingRepository;
 public class PurchasingService {
 	@Autowired
 	private PurchasingRepository repo;
+
+	@Autowired
+	private RawMaterialService materialService;
 	
 	private final Logger logger = LoggerFactory.getLogger(this.getClass());
 	
@@ -33,6 +38,17 @@ public class PurchasingService {
 			purchasing.setAmount(purchasing.calculateTotal());
 			Double discount = purchasing.getAmount() * (purchasing.getDiscount() / 100);
 			purchasing.setNetto(purchasing.getAmount() - discount);
+			
+			
+			//insert to stock here
+			for(PurchasingDetail detail : purchasing.getDetails()) {
+				Long id = detail.getMaterial().getMaterialId();
+				Double qty = detail.getQuantity();
+				//check if material have child.
+				RawMaterial material = materialService.getMaterial(id);
+				materialService.insertStock(material, qty);
+				
+			}
 			repo.save(purchasing);
 		} catch (Exception ex) {
 			throw ex;

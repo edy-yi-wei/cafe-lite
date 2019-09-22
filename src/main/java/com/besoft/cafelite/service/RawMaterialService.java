@@ -47,7 +47,7 @@ public class RawMaterialService {
 		
 	}
 	
-	@Transactional(rollbackOn = Exception.class)
+	//@Transactional(rollbackOn = Exception.class)
 	public Boolean insertStock(RawMaterial rawMaterial, Double qty) throws Exception {
 		Boolean status = false;
 		logger.info(String.format("%s - insertStock", className));
@@ -78,7 +78,7 @@ public class RawMaterialService {
 	}
 	
 	
-	@Transactional(rollbackOn = Exception.class)
+	//@Transactional(rollbackOn = Exception.class)
 	public Boolean adjustStock(RawMaterial rawMaterial) throws Exception {
 		Boolean status = false;
 		logger.info(String.format("%s - adjustStock", className));
@@ -129,6 +129,16 @@ public class RawMaterialService {
 			return repo.findAllChildByParentId(id);
 		} catch(Exception ex) {
 			logger.info(String.format("ERROR %s - getMaterialDetails [id: %s] %s", new Object[] {className, id, ex.getMessage()}));
+			throw ex;
+		}
+	}
+	
+	public List<RawMaterial> getMaterialParentOnly() throws Exception {
+		logger.info(String.format("%s - getMaterialParentOnly", new Object[] {className}));
+		try {
+			return repo.findAllParent();
+		} catch(Exception ex) {
+			logger.info(String.format("ERROR %s - getMaterialParentOnly %s", new Object[] {className, ex.getMessage()}));
 			throw ex;
 		}
 	}

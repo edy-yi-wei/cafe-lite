@@ -39,8 +39,6 @@ public class PurchasingController {
 	@Autowired
 	private PurchasingService service;
 	@Autowired
-	private RawMaterialService materialService;
-	@Autowired
 	private ModelMapper modelMapper;
 	@Autowired
 	private SecurityService securityService;
@@ -56,15 +54,6 @@ public class PurchasingController {
 			User user = userService.getUser(loginUser);
 			purchasing.setUser(user);
 			service.save(purchasing);
-			//insert to stock here
-			for(PurchasingDetail detail : purchasing.getDetails()) {
-				Long id = detail.getMaterial().getMaterialId();
-				Double qty = detail.getQuantity();
-				//check if material have child.
-				RawMaterial material = materialService.getMaterial(id);
-				materialService.insertStock(material, qty);
-				
-			}
 			result.add("Purchasing is saved successfully!");
 			return new ResponseEntity<List<String>>(result, HttpStatus.OK);
 		} catch(Exception ex) {

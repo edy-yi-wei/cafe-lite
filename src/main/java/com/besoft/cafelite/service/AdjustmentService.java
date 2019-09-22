@@ -14,6 +14,9 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import com.besoft.cafelite.model.Adjustment;
+import com.besoft.cafelite.model.AdjustmentDetail;
+import com.besoft.cafelite.model.PurchasingDetail;
+import com.besoft.cafelite.model.RawMaterial;
 import com.besoft.cafelite.repository.AdjustmentRepository;
 
 
@@ -23,6 +26,9 @@ public class AdjustmentService {
 	@Autowired
 	private AdjustmentRepository repo;
 	
+	@Autowired
+	private RawMaterialService materialService;
+	
 	private final Logger logger = LoggerFactory.getLogger(this.getClass());
 	
 	@Transactional(rollbackOn = Exception.class)
@@ -31,7 +37,20 @@ public class AdjustmentService {
 		try {
 			adjustment.setAdjustmentDate(new Date());
 			adjustment.setAdjustmentNumber(generateAutoNumber());
-			repo.save(adjustment);
+			
+			//insert to stock here
+			for(AdjustmentDetail detail : adjustment.getDetails()) {
+			Long id = detail.getMaterial().getMaterialId();
+			//check if material have child.
+			RawMaterial material = materialService.getMaterial(id);
+			if(material.getDetails().size() == 0) {
+				material.setQuantity(detail.getQuantity());
+				materialService.adjustStock(material);
+			}
+			
+		}
+			
+		repo.save(adjustment);
 		} catch (Exception ex) {
 			throw ex;
 		}
