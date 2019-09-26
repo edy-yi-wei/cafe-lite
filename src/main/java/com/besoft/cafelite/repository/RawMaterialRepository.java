@@ -14,7 +14,7 @@ import com.besoft.cafelite.model.RawMaterial;
 @Repository
 public interface RawMaterialRepository extends JpaRepository<RawMaterial, Long>{
 	
-	Page<RawMaterial> findByMaterialCodeContainingAllIgnoreCaseAndDeleted(String roleName, boolean deleted, Pageable page);
+	Page<RawMaterial> findByMaterialNameContainingAllIgnoreCaseAndDeleted(String search, boolean deleted, Pageable page);
 
 	@Query("SELECT s FROM RawMaterial s WHERE s.deleted = false")
 	List<RawMaterial> findAllMaterial();
@@ -24,5 +24,8 @@ public interface RawMaterialRepository extends JpaRepository<RawMaterial, Long>{
 	
 	@Query(value = "SELECT * FROM tbl_material a LEFT JOIN tbl_material_detail b ON a.material_id = b.mat_id WHERE a.deleted = false AND b.mat_id IS NULL", nativeQuery = true)
 	List<RawMaterial> findAllParent();
+	
+	@Query(value = "SELECT * FROM tbl_material a LEFT JOIN tbl_material_detail b ON a.material_id = b.mat_id WHERE a.deleted = false AND b.mat_id IS NULL AND (a.material_code LIKE %:materialCode% OR a.material_name LIKE %:materialName%)", nativeQuery = true)
+	Page<RawMaterial> findAllParent(@Param("materialCode") String materialCode, @Param("materialName") String materialName, Pageable page);
 	
 }

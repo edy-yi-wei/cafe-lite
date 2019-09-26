@@ -133,10 +133,28 @@ public class RawMaterialService {
 		}
 	}
 	
-	public List<RawMaterial> getMaterialParentOnly() throws Exception {
-		logger.info(String.format("%s - getMaterialParentOnly", new Object[] {className}));
+//	public List<RawMaterial> getMaterialParentOnly() throws Exception {
+//		logger.info(String.format("%s - getMaterialParentOnly", new Object[] {className}));
+//		try {
+//			return repo.findAllParent();
+//		} catch(Exception ex) {
+//			logger.info(String.format("ERROR %s - getMaterialParentOnly %s", new Object[] {className, ex.getMessage()}));
+//			throw ex;
+//		}
+//	}
+	
+	public Page<RawMaterial> getMaterialParentOnly(String search, int pageNumber, int pageSize) throws Exception {
+		logger.info(String.format("%s - getMaterialParentOnly [[search: %s, page: %s, size: %s]", new Object[] {className, search, pageNumber, pageSize}));
+		
 		try {
-			return repo.findAllParent();
+			if(pageNumber == 0) {
+				List<RawMaterial> list = repo.findAllParent();
+				Page<RawMaterial> result = new PageImpl<>(list);
+				return result;
+			} else {
+				Pageable page = PageRequest.of(pageNumber-1, pageSize);
+				return repo.findAllParent(search, search, page);
+			}
 		} catch(Exception ex) {
 			logger.info(String.format("ERROR %s - getMaterialParentOnly %s", new Object[] {className, ex.getMessage()}));
 			throw ex;
@@ -153,7 +171,7 @@ public class RawMaterialService {
 				return result;
 			} else {
 				Pageable page = PageRequest.of(pageNumber-1, pageSize);
-				return repo.findByMaterialCodeContainingAllIgnoreCaseAndDeleted(search, false, page);
+				return repo.findByMaterialNameContainingAllIgnoreCaseAndDeleted(search, false, page);
 			}
 		} catch(Exception ex) {
 			logger.info(String.format("ERROR %s - selectMaterial %s", new Object[] {className, ex.getMessage()}));
