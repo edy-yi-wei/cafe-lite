@@ -56,17 +56,7 @@ public class AdjustmentController {
 			User user = userService.getUser(loginUser);
 			adjustment.setUser(user);
 			service.save(adjustment);
-			//insert to stock here
-//			for(AdjustmentDetail detail : adjustment.getDetails()) {
-//				Long id = detail.getMaterial().getMaterialId();
-//				//check if material have child.
-//				RawMaterial material = materialService.getMaterial(id);
-//				if(material.getDetails().size() == 0) {
-//					material.setQuantity(detail.getQuantity());
-//					materialService.adjustStock(material);
-//				}
-//				
-//			}
+
 			result.add("Adjustment is saved successfully!");
 			return new ResponseEntity<List<String>>(result, HttpStatus.OK);
 		} catch(Exception ex) {

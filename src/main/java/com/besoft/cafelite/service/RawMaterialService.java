@@ -79,14 +79,28 @@ public class RawMaterialService {
 	
 	
 	//@Transactional(rollbackOn = Exception.class)
-	public Boolean adjustStock(RawMaterial rawMaterial) throws Exception {
+	public Boolean adjustStock(RawMaterial rawMaterial, Double qty) throws Exception {
 		Boolean status = false;
 		logger.info(String.format("%s - adjustStock", className));
 		try {
 			System.out.println("id: "+ rawMaterial.getMaterialId());
-			Double quantity = rawMaterial.getQuantity();
-			rawMaterial.setQuantity(quantity);
-			repo.save(rawMaterial);
+//			rawMaterial.setQuantity(quantity);
+//			repo.save(rawMaterial);
+			
+			if(rawMaterial.getDetails() != null && rawMaterial.getDetails().size() > 0) {
+				//insert to detail quantity, multiply with conversion quantity
+				for(RawMaterialDetail matDetail : rawMaterial.getDetails()) {
+					RawMaterial materialDetail = getMaterial(matDetail.getMaterial().getMaterialId());
+					Double quantity = matDetail.getConversionQuantity() * qty;
+					materialDetail.setQuantity(quantity);
+					repo.save(materialDetail);
+				}
+			}else {
+				//insert to quantity
+				Double quantity = qty;
+				rawMaterial.setQuantity(quantity);
+				repo.save(rawMaterial);
+			}
 			status = true;
 		} catch(Exception ex) {
 			logger.info(String.format("ERROR %s - adjustStock %s", new Object[] {className, ex.getMessage()}));

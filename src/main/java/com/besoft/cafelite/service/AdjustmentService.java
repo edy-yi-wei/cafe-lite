@@ -38,17 +38,18 @@ public class AdjustmentService {
 			adjustment.setAdjustmentDate(new Date());
 			adjustment.setAdjustmentNumber(generateAutoNumber());
 			
-			//insert to stock here
 			for(AdjustmentDetail detail : adjustment.getDetails()) {
-			Long id = detail.getMaterial().getMaterialId();
-			//check if material have child.
-			RawMaterial material = materialService.getMaterial(id);
-			if(material.getDetails().size() == 0) {
-				material.setQuantity(detail.getQuantity());
-				materialService.adjustStock(material);
-			}
+				Long id = detail.getMaterial().getMaterialId();
+				//check if material have child.
+				RawMaterial material = materialService.getMaterial(id);
+				Double qty = detail.getQuantity();
+				materialService.adjustStock(material, qty);
+//				if(material.getDetails().size() == 0) {
+//					material.setQuantity(detail.getQuantity());
+//					materialService.adjustStock(material);
+//				}
 			
-		}
+			}
 			
 		repo.save(adjustment);
 		} catch (Exception ex) {

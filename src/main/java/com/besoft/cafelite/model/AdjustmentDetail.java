@@ -23,7 +23,7 @@ import lombok.Data;
 
 @Data
 @Entity
-@Table(name = "tbl_adjusment_detail")
+@Table(name = "tbl_adjustment_detail")
 public class AdjustmentDetail implements Serializable{
 	/**
 	 * 
