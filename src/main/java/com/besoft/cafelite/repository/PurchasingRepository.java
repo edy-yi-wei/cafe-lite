@@ -18,8 +18,9 @@ public interface PurchasingRepository extends JpaRepository<Purchasing, Long>{
 	@Query("SELECT MAX(i.purchasingNumber) FROM Purchasing i WHERE month(i.purchasingDate)= :bulan AND year(i.purchasingDate)= :tahun")
 	String getLastPurchasingNumber(@Param("bulan") int bulan, @Param("tahun") int tahun);
 	
-	@Query("SELECT i FROM Purchasing i WHERE i.purchasingDate>= :startDate AND i.purchasingDate<= :endDate")
+	@Query("SELECT i FROM Purchasing i WHERE i.purchasingDate>= :startDate AND i.purchasingDate<= :endDate ORDER BY i.purchasingDate ASC")
 	Page<Purchasing> findPurchasingByPeriod(@Param("startDate") Date startDate, @Param("endDate") Date endDate, Pageable page);
+	
 	
 	@Query("SELECT SUM(i.netto) FROM Purchasing i WHERE i.purchasingDate>= :startDate AND i.purchasingDate<= :endDate")
 	Double calculateTotalPurchasing(@Param("startDate") Date startDate, @Param("endDate") Date endDate);

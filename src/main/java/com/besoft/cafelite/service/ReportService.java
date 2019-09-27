@@ -29,14 +29,18 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import com.besoft.cafelite.dto.SoldMenu;
+import com.besoft.cafelite.model.Adjustment;
 import com.besoft.cafelite.model.CashierSession;
 import com.besoft.cafelite.model.Invoice;
 import com.besoft.cafelite.model.InvoiceDetail;
+import com.besoft.cafelite.model.Purchasing;
+import com.besoft.cafelite.model.RawMaterial;
 import com.besoft.cafelite.report.CashierSessionReport;
 import com.besoft.cafelite.report.InvoiceReport;
 import com.besoft.cafelite.report.SoldMenuReport;
@@ -260,6 +264,30 @@ public class ReportService {
 				m.setQuantity(d.getQuantity());
 				list.add(m);
 			}
+		}
+	}
+	
+	public Page<Purchasing> getPurchasings(Date startDate, Date endDate, int pageNumber, int pageSize) throws Exception {
+		logger.info(String.format("%s - getPurchasings [page: %s, size: %s]", new Object[] {"Report Service", pageNumber, pageSize}));
+		
+		try {
+			Pageable page = PageRequest.of(pageNumber-1, pageSize);
+			return repo.findPurchasingByPeriod(startDate, endDate, page);
+		} catch(Exception ex) {
+			logger.info(String.format("ERROR %s - getPurchasings %s", new Object[] {"Report Service", ex.getMessage()}));
+			throw ex;
+		}
+	}
+	
+	public Page<Adjustment> getAdjustments(Date startDate, Date endDate, int pageNumber, int pageSize) throws Exception {
+		logger.info(String.format("%s - getAdjustments [page: %s, size: %s]", new Object[] {"Report Service", pageNumber, pageSize}));
+		
+		try {
+			Pageable page = PageRequest.of(pageNumber-1, pageSize);
+			return repo.findAdjustmentByPeriod(startDate, endDate, page);
+		} catch(Exception ex) {
+			logger.info(String.format("ERROR %s - getAdjustments %s", new Object[] {"Report Service", ex.getMessage()}));
+			throw ex;
 		}
 	}
 }

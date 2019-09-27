@@ -14,7 +14,7 @@ import com.besoft.cafelite.model.Supplier;;
 @Repository
 public interface SupplierRepository extends JpaRepository<Supplier, Long>{
 	
-	Page<Supplier> findBySupplierCodeContainingAllIgnoreCaseAndDeleted(String supplierCode, boolean deleted, Pageable page);
+	Page<Supplier> findBySupplierNameContainingAllIgnoreCaseAndDeleted(String supplierName, boolean deleted, Pageable page);
 
 	@Query("SELECT s FROM Supplier s WHERE s.deleted = false")
 	List<Supplier> findAllSupplier();

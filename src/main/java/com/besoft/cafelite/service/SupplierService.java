@@ -72,7 +72,7 @@ public class SupplierService {
 				return result;
 			} else {
 				Pageable page = PageRequest.of(pageNumber-1, pageSize);
-				return repo.findBySupplierCodeContainingAllIgnoreCaseAndDeleted(search, false, page);
+				return repo.findBySupplierNameContainingAllIgnoreCaseAndDeleted(search, false, page);
 			}
 		} catch(Exception ex) {
 			logger.info(String.format("ERROR %s - selectSupplier %s", new Object[] {className, ex.getMessage()}));

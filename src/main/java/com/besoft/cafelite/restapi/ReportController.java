@@ -17,8 +17,10 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.besoft.cafelite.dto.InvoiceForList;
 import com.besoft.cafelite.dto.SoldMenu;
+import com.besoft.cafelite.model.Adjustment;
 import com.besoft.cafelite.model.CashierSession;
 import com.besoft.cafelite.model.Invoice;
+import com.besoft.cafelite.model.Purchasing;
 import com.besoft.cafelite.service.CashierSessionService;
 import com.besoft.cafelite.service.InvoiceService;
 import com.besoft.cafelite.service.ReportService;
@@ -101,5 +103,31 @@ public class ReportController {
 	private InvoiceForList convertToDto(Invoice invoice) {
 		InvoiceForList inv = modelMapper.map(invoice, InvoiceForList.class);
 		return inv;
+	}
+	
+	@RequestMapping(value = "/report/purchasings", method = RequestMethod.GET)
+	public Page<Purchasing> selectPurchasing(@RequestParam(name = "startDate", required = true) @DateTimeFormat(pattern = "E MMM dd yyyy") Date startDate, @RequestParam(name = "endDate", required = true) @DateTimeFormat(pattern = "E MMM dd yyyy") Date endDate, 
+			@RequestParam(name = "page", required = true) int pageNumber){
+		Page<Purchasing> list = null;
+		
+		try {
+			list = reportService.getPurchasings(startDate, endDate, pageNumber, Constant.ROW_PER_PAGE);
+		} catch (Exception ex) {
+			ex.printStackTrace();
+		}
+		return list;
+	}
+	
+	@RequestMapping(value = "/report/adjustments", method = RequestMethod.GET)
+	public Page<Adjustment> selectAdjustment(@RequestParam(name = "startDate", required = true) @DateTimeFormat(pattern = "E MMM dd yyyy") Date startDate, @RequestParam(name = "endDate", required = true) @DateTimeFormat(pattern = "E MMM dd yyyy") Date endDate, 
+			@RequestParam(name = "page", required = true) int pageNumber){
+		Page<Adjustment> list = null;
+		
+		try {
+			list = reportService.getAdjustments(startDate, endDate, pageNumber, Constant.ROW_PER_PAGE);
+		} catch (Exception ex) {
+			ex.printStackTrace();
+		}
+		return list;
 	}
 }
