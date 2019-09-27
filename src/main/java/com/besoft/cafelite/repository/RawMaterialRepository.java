@@ -28,4 +28,16 @@ public interface RawMaterialRepository extends JpaRepository<RawMaterial, Long>{
 	@Query(value = "SELECT * FROM tbl_material a LEFT JOIN tbl_material_detail b ON a.material_id = b.mat_id WHERE a.deleted = false AND b.mat_id IS NULL AND (a.material_code LIKE %:materialCode% OR a.material_name LIKE %:materialName%)", nativeQuery = true)
 	Page<RawMaterial> findAllParent(@Param("materialCode") String materialCode, @Param("materialName") String materialName, Pageable page);
 	
+	
+	@Query(value = "SELECT * FROM tbl_material a LEFT JOIN tbl_material_detail b ON a.material_id = b.material_id WHERE a.deleted = false AND b.material_id IS NULL", nativeQuery = true)
+	List<RawMaterial> findAllStock();
+	
+	@Query(value = "SELECT * FROM tbl_material a LEFT JOIN tbl_material_detail b ON a.material_id = b.material_id WHERE a.stockable = :stockable AND a.deleted = false AND b.material_id IS NULL", nativeQuery = true)
+	List<RawMaterial> findAllStock(@Param("stockable") boolean stockable);
+	
+	@Query(value = "SELECT * FROM tbl_material a LEFT JOIN tbl_material_detail b ON a.material_id = b.material_id WHERE a.deleted = false AND b.material_id IS NULL AND (a.material_code LIKE %:materialCode% OR a.material_name LIKE %:materialName%)", nativeQuery = true)
+	Page<RawMaterial> findAllStock(@Param("materialCode") String materialCode, @Param("materialName") String materialName, Pageable page);
+	
+	@Query(value = "SELECT * FROM tbl_material a LEFT JOIN tbl_material_detail b ON a.material_id = b.material_id WHERE a.stockable = :stockable AND a.deleted = false AND b.material_id IS NULL AND (a.material_code LIKE %:materialCode% OR a.material_name LIKE %:materialName%)", nativeQuery = true)
+	Page<RawMaterial> findAllStock(@Param("stockable") boolean stockable, @Param("materialCode") String materialCode, @Param("materialName") String materialName, Pageable page);
 }

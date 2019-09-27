@@ -111,6 +111,24 @@ public class RawMaterialService {
 		
 	}
 	
+	public Boolean updateStock(RawMaterial rawMaterial) throws Exception {
+		Boolean status = false;
+		logger.info(String.format("%s - updateStock", className));
+		try {
+			System.out.println("id: "+ rawMaterial.getMaterialId());
+			
+			repo.save(rawMaterial);
+			
+			status = true;
+		} catch(Exception ex) {
+			logger.info(String.format("ERROR %s - updateStock %s", new Object[] {className, ex.getMessage()}));
+			throw ex;
+		}
+		
+		return status;
+		
+	}
+	
 	
 
 	@Transactional(rollbackOn = Exception.class)
@@ -157,7 +175,43 @@ public class RawMaterialService {
 //		}
 //	}
 	
-	public Page<RawMaterial> getMaterialParentOnly(String search, int pageNumber, int pageSize) throws Exception {
+	public Page<RawMaterial> getStock(String search, int pageNumber, int pageSize) throws Exception {
+		logger.info(String.format("%s - getMaterialParentOnly [[search: %s, page: %s, size: %s]", new Object[] {className, search, pageNumber, pageSize}));
+		
+		try {
+			if(pageNumber == 0) {
+				List<RawMaterial> list = repo.findAllStock();
+				Page<RawMaterial> result = new PageImpl<>(list);
+				return result;
+			} else {
+				Pageable page = PageRequest.of(pageNumber-1, pageSize);
+				return repo.findAllStock(search, search, page);
+			}
+		} catch(Exception ex) {
+			logger.info(String.format("ERROR %s - getMaterialParentOnly %s", new Object[] {className, ex.getMessage()}));
+			throw ex;
+		}
+	}
+	
+	public Page<RawMaterial> getStockable(boolean stockable, String search, int pageNumber, int pageSize) throws Exception {
+		logger.info(String.format("%s - getMaterialParentOnly [[search: %s, page: %s, size: %s]", new Object[] {className, search, pageNumber, pageSize}));
+		
+		try {
+			if(pageNumber == 0) {
+				List<RawMaterial> list = repo.findAllStock(stockable);
+				Page<RawMaterial> result = new PageImpl<>(list);
+				return result;
+			} else {
+				Pageable page = PageRequest.of(pageNumber-1, pageSize);
+				return repo.findAllStock(stockable, search, search, page);
+			}
+		} catch(Exception ex) {
+			logger.info(String.format("ERROR %s - getMaterialParentOnly %s", new Object[] {className, ex.getMessage()}));
+			throw ex;
+		}
+	}
+	
+	public Page<RawMaterial> getMaterialParent(String search, int pageNumber, int pageSize) throws Exception {
 		logger.info(String.format("%s - getMaterialParentOnly [[search: %s, page: %s, size: %s]", new Object[] {className, search, pageNumber, pageSize}));
 		
 		try {

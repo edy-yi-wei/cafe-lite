@@ -23,6 +23,10 @@ import com.besoft.cafelite.dto.SoldMenu;
 import com.besoft.cafelite.model.CashierSession;
 import com.besoft.cafelite.model.Invoice;
 import com.besoft.cafelite.model.InvoiceDetail;
+import com.besoft.cafelite.model.Menu;
+import com.besoft.cafelite.model.MenuMaterial;
+import com.besoft.cafelite.model.RawMaterial;
+import com.besoft.cafelite.model.RawMaterialDetail;
 import com.besoft.cafelite.repository.InvoiceRepository;
 import com.besoft.cafelite.utilities.PrintElement;
 import com.besoft.cafelite.utilities.Printer;
@@ -34,6 +38,13 @@ public class InvoiceService {
 	private InvoiceRepository repo;
 	@Autowired
 	private CashierSessionService cashierSessionService;
+	
+	@Autowired
+	private MenuService menuService;
+	
+	@Autowired
+	private RawMaterialService materialService;
+	
 	@Autowired
 	private Printer printer;
 	
@@ -46,6 +57,27 @@ public class InvoiceService {
 			invoice.setInvoiceDate(new Date());
 			invoice.setInvoiceNumber(generateInvoiceNumber());
 			invoice.setTotal(invoice.calculateTotal());
+			
+			//adjust stock here
+			if(invoice.getDetails() != null && invoice.getDetails().size() > 0) {
+				for(InvoiceDetail details : invoice.getDetails()) {
+					Double soldQty = details.getQuantity();
+					Menu menu = menuService.getMenu(details.getMenu().getMenuId());
+					details.setMenu(menu);
+					if(details.getMenu().getMaterials() != null && details.getMenu().getMaterials().size() > 0) {
+						for(MenuMaterial menuMaterial : details.getMenu().getMaterials()) {
+							Double qty = soldQty * menuMaterial.getQuantity();
+							
+							RawMaterial material = materialService.getMaterial(menuMaterial.getMaterial().getMaterialId());
+							if(material.isStockable()) {
+								material.setQuantity(material.getQuantity() - qty);
+								materialService.updateStock(material);
+							}
+						}
+					}
+				}
+			}
+			
 			Invoice inv = repo.save(invoice);
 			cashierSessionService.updateCashierSession(cashierName, invoice.calculateTotal());
 			printInvoice(inv, cashierName);

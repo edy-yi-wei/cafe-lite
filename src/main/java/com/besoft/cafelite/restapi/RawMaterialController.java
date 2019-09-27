@@ -54,7 +54,29 @@ public class RawMaterialController {
 	public Page<RawMaterial> selectMaterialParent(@RequestParam(name = "search", required = false) String search, @RequestParam(name = "page", required = true) int pageNumber){
 		Page<RawMaterial> list = null;
 		try {
-			list = service.getMaterialParentOnly(search, pageNumber, Constant.ROW_PER_PAGE);
+			list = service.getMaterialParent(search, pageNumber, Constant.ROW_PER_PAGE);
+		} catch (Exception ex) {
+			ex.printStackTrace();
+		}
+		return list;
+	}
+	
+	@RequestMapping(value = "/materials/stock", method = RequestMethod.GET)
+	public Page<RawMaterial> selectStock(@RequestParam(name = "search", required = false) String search, @RequestParam(name = "page", required = true) int pageNumber){
+		Page<RawMaterial> list = null;
+		try {
+			list = service.getStock(search, pageNumber, Constant.ROW_PER_PAGE);
+		} catch (Exception ex) {
+			ex.printStackTrace();
+		}
+		return list;
+	}
+	
+	@RequestMapping(value = "/materials/stockable", method = RequestMethod.GET)
+	public Page<RawMaterial> selectStockable(@RequestParam(name = "stockable", required = false) boolean stockable, @RequestParam(name = "search", required = false) String search, @RequestParam(name = "page", required = true) int pageNumber){
+		Page<RawMaterial> list = null;
+		try {
+			list = service.getStockable(stockable, search, pageNumber, Constant.ROW_PER_PAGE);
 		} catch (Exception ex) {
 			ex.printStackTrace();
 		}
