@@ -117,7 +117,9 @@ public class RawMaterialService {
 		try {
 			System.out.println("id: "+ rawMaterial.getMaterialId());
 			
-			repo.save(rawMaterial);
+			if(rawMaterial.getDetails() == null && rawMaterial.getDetails().size() == 0) {
+				repo.save(rawMaterial);
+			}
 			
 			status = true;
 		} catch(Exception ex) {
